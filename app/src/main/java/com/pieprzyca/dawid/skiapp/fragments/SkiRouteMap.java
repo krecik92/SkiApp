@@ -11,9 +11,9 @@ import com.pieprzyca.dawid.skiapp.R;
 /**
  * Created by Dawid on 29.05.2016.
  */
-public class TwoFragment extends Fragment {
+public class SkiRouteMap extends Fragment {
 
-    public TwoFragment() {
+    public SkiRouteMap() {
         // Required empty public constructor
     }
 
@@ -26,7 +26,7 @@ public class TwoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two, container, false);
+        return inflater.inflate(R.layout.skiroutemap, container, false);
     }
 
 }

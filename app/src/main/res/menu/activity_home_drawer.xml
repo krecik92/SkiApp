@@ -4,19 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_skiresort"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_favourite"
             android:title="Moje ośrodki" />
         <item
             android:id="@+id/nav_search"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_search"
             android:title="Wyszukaj" />
         <item
             android:id="@+id/nav_near"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_location"
             android:title="W pobliżu" />
         <item
             android:id="@+id/nav_messages"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_messages"
             android:title="Wiadomości" />
     </group>
 </menu>
