@@ -176,7 +176,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         };
 
