@@ -124,23 +124,16 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     private class DownloadSkiResortNameList extends AsyncTask<String, Integer, Long> {
         @Override
         protected Long doInBackground(String... params) {
-            try {
                 FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(params[0], skiResortNameList, true);
+                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(params[0], skiResortNameList, false, adapter);
                 RequestQueue requestQueue = Volley.newRequestQueue(SearchActivity.this);
                 requestQueue.add(stringRequest);
-                //Waiting for fetch data
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
+                return null;
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
             Log.d("Database", skiResortNameList.toString());
-            adapter.addAll(skiResortNameList);
         }
     }
 }

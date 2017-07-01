@@ -1,6 +1,8 @@
 package com.pieprzyca.dawid.skiapp;
 
 import android.util.Log;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,14 +19,16 @@ import java.util.List;
  * Created by Dawid on 18.06.2017.
  */
 public class FetchFromDatabase {
-     public StringRequest getDataFromDatabase(String url, final List<String> stringList, final boolean isFav) {
+     public StringRequest getDataFromDatabase(String url, final List<String> stringList, final boolean isFav, final ArrayAdapter<String> adapter) {
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(isFav == true){
                     showJSONwithFavourite(response,stringList);
+                    adapter.addAll(stringList);
                 }else{
                     showJSON(response, stringList);
+                    adapter.addAll(stringList);
                 }
             }
         },

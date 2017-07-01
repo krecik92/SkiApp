@@ -124,78 +124,26 @@ public class Home extends AppCompatActivity
             startActivity(search);
         } else if (id == R.id.nav_near) {
 
-        } else if (id == R.id.nav_messages) {
+        } else if (id == R.id.nav_messages){
 
-        }/* else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-/*
-    private void getDataFromDatabase(String url) {
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                showJSON(response);
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Home.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-    private void showJSON(String response){
-        String name = "";
-        String isFavourite = "0";
-        try{
-            JSONObject jsonObject = new JSONObject(response);
-            JSONArray result = jsonObject.getJSONArray(DatabaseConfig.JSON_ARRAY);
-            for(int x=0; x<result.length(); x++){
-                JSONObject collegeData = result.getJSONObject(x);
-                isFavourite = collegeData.getString(DatabaseConfig.KEY_IS_FAVOURITE);
-                 if(isFavourite.equals("1")){
-                     name= collegeData.getString(DatabaseConfig.KEY_NAME);
-                     Log.d("Database", name);
-                     skiResortNameList.add(name);
-                }else {
-                     Log.d("Database", "isNotFavourtie");
-                 }
-            }
-        }
-        catch(JSONException e){
-            e.printStackTrace();
-        }
-    }
-    */
     private class DownloadSkiResortNameList extends AsyncTask<String, Integer, Long> {
         @Override
         protected Long doInBackground(String... params) {
-            try {
                 FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(DatabaseConfig.LOGIN_REQUEST_URL, skiResortNameList, true);
+                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(DatabaseConfig.LOGIN_REQUEST_URL, skiResortNameList, true, adapter);
                 RequestQueue requestQueue = Volley.newRequestQueue(Home.this);
                 requestQueue.add(stringRequest);
-                //Waiting for fetch data
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
+                return null;
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
             Log.d("Database", skiResortNameList.toString());
-            adapter.addAll(skiResortNameList);
         }
     }
 }
