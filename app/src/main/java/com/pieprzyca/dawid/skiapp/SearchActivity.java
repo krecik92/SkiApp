@@ -1,6 +1,5 @@
 package com.pieprzyca.dawid.skiapp;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,11 +28,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     List<String> skiResortNameList = new ArrayList<>();
+    List<JSONObject> jsonObjectList = new ArrayList<>();
     ArrayAdapter<String> adapter;
     ListView listView;
     @Override
@@ -60,6 +64,15 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent detail = new Intent(SearchActivity.this, DetailedActivity.class);
+                detail.putExtra("resortName", adapter.getItem(position));
+                startActivity(detail);
+                adapter.clear();
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -68,18 +81,20 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         SearchView searchView = (SearchView) MenuItemCompat.getActionView((searchItem));
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getBaseContext(), SearchActivity.class);
+        new DownloadSkiResortNameList().execute(DatabaseConfig.LOGIN_REQUEST_URL);
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(componentName));
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        new DownloadSkiResortNameList().execute(DatabaseConfig.LOGIN_REQUEST_URL);
+                        //adapter.getFilter().filter(query);
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String newText){
+                        adapter.getFilter().filter(newText);
                         return false;
                     }
                 }
@@ -125,7 +140,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         @Override
         protected Long doInBackground(String... params) {
                 FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(params[0], skiResortNameList, false, adapter);
+                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(params[0], skiResortNameList, jsonObjectList, false, adapter);
                 RequestQueue requestQueue = Volley.newRequestQueue(SearchActivity.this);
                 requestQueue.add(stringRequest);
                 return null;

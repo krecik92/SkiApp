@@ -34,7 +34,6 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".DetailedActivity"
-            android:label="@string/skiResort1"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data

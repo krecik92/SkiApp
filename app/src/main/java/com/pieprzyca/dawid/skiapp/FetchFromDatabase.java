@@ -1,8 +1,10 @@
 package com.pieprzyca.dawid.skiapp;
 
+import android.app.AlertDialog;
 import android.util.Log;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,15 +21,15 @@ import java.util.List;
  * Created by Dawid on 18.06.2017.
  */
 public class FetchFromDatabase {
-     public StringRequest getDataFromDatabase(String url, final List<String> stringList, final boolean isFav, final ArrayAdapter<String> adapter) {
+     public StringRequest getDataFromDatabase(String url, final List<String> stringList, final List<JSONObject> jsonObjectList, final boolean isFav, final ArrayAdapter<String> adapter) {
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(isFav == true){
-                    showJSONwithFavourite(response,stringList);
+                    showJSONwithFavourite(response,stringList, jsonObjectList);
                     adapter.addAll(stringList);
                 }else{
-                    showJSON(response, stringList);
+                    showJSON(response, stringList, jsonObjectList);
                     adapter.addAll(stringList);
                 }
             }
@@ -35,12 +37,12 @@ public class FetchFromDatabase {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(Home.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+
                     }
                 });
         return stringRequest;
     }
-    private void showJSONwithFavourite(String response, List<String> stringList){
+    private void showJSONwithFavourite(String response, List<String> stringList, List<JSONObject> jsonObjectList){
         String name = "";
         String isFavourite = "0";
         try{
@@ -48,6 +50,7 @@ public class FetchFromDatabase {
             JSONArray result = jsonObject.getJSONArray(DatabaseConfig.JSON_ARRAY);
             for(int x=0; x<result.length(); x++){
                 JSONObject collegeData = result.getJSONObject(x);
+                jsonObjectList.add(collegeData);
                 isFavourite = collegeData.getString(DatabaseConfig.KEY_IS_FAVOURITE);
                 if(isFavourite.equals("1")){
                     name= collegeData.getString(DatabaseConfig.KEY_NAME);
@@ -62,13 +65,14 @@ public class FetchFromDatabase {
             e.printStackTrace();
         }
     }
-    private void showJSON(String response, List<String> stringList){
+    private void showJSON(String response, List<String> stringList, List<JSONObject> jsonObjectList){
         String name = "";
         try{
             JSONObject jsonObject = new JSONObject(response);
             JSONArray result = jsonObject.getJSONArray(DatabaseConfig.JSON_ARRAY);
             for(int x=0; x<result.length(); x++){
                 JSONObject collegeData = result.getJSONObject(x);
+                jsonObjectList.add(collegeData);
                 name= collegeData.getString(DatabaseConfig.KEY_NAME);
                 Log.d("Database", name);
                 stringList.add(name);

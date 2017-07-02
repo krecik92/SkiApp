@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pieprzyca.dawid.skiapp.R;
 import com.pieprzyca.dawid.skiapp.data.Channel;
@@ -76,6 +77,6 @@ public class ResortWeather extends Fragment implements WheatherServiceCallback {
     @Override
     public void serviceFailure(Exception exception) {
         dialog.hide();
-        //Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), exception.getMessage().toString(), Toast.LENGTH_LONG).show();
     }
 }

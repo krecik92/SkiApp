@@ -40,6 +40,7 @@ public class Home extends AppCompatActivity
     ListView listView;
     ArrayAdapter<String> adapter;
     List<String> skiResortNameList = new ArrayList<>();
+    List<JSONObject> jsonObjectList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class Home extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detail = new Intent(Home.this, DetailedActivity.class);
+                detail.putExtra("resortName", adapter.getItem(position));
                 startActivity(detail);
                 adapter.clear();
             }
@@ -135,7 +137,7 @@ public class Home extends AppCompatActivity
         @Override
         protected Long doInBackground(String... params) {
                 FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(DatabaseConfig.LOGIN_REQUEST_URL, skiResortNameList, true, adapter);
+                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(DatabaseConfig.LOGIN_REQUEST_URL, skiResortNameList, jsonObjectList, true, adapter);
                 RequestQueue requestQueue = Volley.newRequestQueue(Home.this);
                 requestQueue.add(stringRequest);
                 return null;
