@@ -54,7 +54,7 @@ public class ResortWeather extends Fragment implements WheatherServiceCallback {
         dialog.setMessage("Loading...");
         dialog.show();
 
-        service.refreshWheather("Krynica Zdrój, Polska");
+        service.refreshWheather(getActivity().getIntent().getStringExtra("resortName") + ", Polska");
         return view;
     }
 
@@ -77,6 +77,6 @@ public class ResortWeather extends Fragment implements WheatherServiceCallback {
     @Override
     public void serviceFailure(Exception exception) {
         dialog.hide();
-        Toast.makeText(getContext(), exception.getMessage().toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
     }
 }
