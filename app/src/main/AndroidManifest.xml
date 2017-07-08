@@ -24,14 +24,14 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Home"
-            android:label="Moje ośrodki"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="MySkiResort"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".DetailedActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -42,16 +42,20 @@
 
         <activity
             android:name=".SearchActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Register">
+        </activity>
     </application>
 
 </manifest>

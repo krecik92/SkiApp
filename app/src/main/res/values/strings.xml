@@ -3,11 +3,6 @@
     <string name="skiResort1">Krynica Zdrój</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="one">One</string>
-    <string name="two">Two</string>
-    <string name="three">Three</string>
-    <string name="four">Four</string>
-    <string name="five">Five</string>
     <string name="six">Six</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_detailed">DetailedActivity</string>
