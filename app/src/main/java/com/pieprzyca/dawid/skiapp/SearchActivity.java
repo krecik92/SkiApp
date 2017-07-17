@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,15 +27,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    List<String> skiResortNameList = new ArrayList<>();
-    List<JSONObject> jsonObjectList = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    ResortInfoAdapter adapter;
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +38,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_search);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // App crash when I set toolbar
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -61,14 +54,16 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<ResortData>());
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detail = new Intent(SearchActivity.this, DetailedActivity.class);
-                detail.putExtra("resortName", adapter.getItem(position));
+                detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId());
+                detail.putExtra("resortName", adapter.getItem(position).getResortName());
+                detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
                 startActivity(detail);
                 adapter.clear();
             }
@@ -139,16 +134,12 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     private class DownloadSkiResortNameList extends AsyncTask<String, Integer, Long> {
         @Override
         protected Long doInBackground(String... params) {
-                FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(params[0], skiResortNameList, jsonObjectList, false, adapter);
-                RequestQueue requestQueue = Volley.newRequestQueue(SearchActivity.this);
-                requestQueue.add(stringRequest);
+                DatabaseOperations.fetchResortInfoFromDatabase(getApplicationContext(), params[0], adapter);
                 return null;
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
-            Log.d("Database", skiResortNameList.toString());
         }
     }
 }

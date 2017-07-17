@@ -16,10 +16,6 @@
 
     while(mysqli_stmt_fetch($statement)){
         $response["success"] = true;
-        $response["name"] = $name;
-        $response["email"] = $email;
-        $response["userName"] = $userName;
-        $response["password"] = $password;
     }
     header('Content-Type: application/json');
     echo json_encode($response);

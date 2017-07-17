@@ -3,6 +3,7 @@ package com.pieprzyca.dawid.skiapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pieprzyca.dawid.skiapp.fragments.Reviews;
 import com.pieprzyca.dawid.skiapp.fragments.SkiRouteMap;
 import com.pieprzyca.dawid.skiapp.fragments.ResortLocation;
 import com.pieprzyca.dawid.skiapp.fragments.SkiResortInformation;
@@ -33,7 +35,7 @@ public class DetailedActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -109,6 +111,7 @@ public class DetailedActivity extends AppCompatActivity
         adapter.addFrag(new Rating(), "Ocena");
         adapter.addFrag(new ResortLocation(), "Lokalizacja");
         adapter.addFrag(new SkiRouteMap(), "Mapa tras");
+        adapter.addFrag(new Reviews(), "Opinie");
         viewPager.setAdapter(adapter);
     }
 }

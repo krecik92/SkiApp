@@ -7,40 +7,25 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
-import com.pieprzyca.dawid.skiapp.FetchFromDatabase;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ListView listView;
-    ArrayAdapter<String> adapter;
-    List<String> skiResortNameList = new ArrayList<>();
-    List<JSONObject> jsonObjectList = new ArrayList<>();
+    ResortInfoAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +34,7 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         listView = (ListView)findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<ResortData>());
         new DownloadSkiResortNameList().execute(DatabaseConfig.LOGIN_REQUEST_URL);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
@@ -57,7 +42,9 @@ public class Home extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detail = new Intent(Home.this, DetailedActivity.class);
-                detail.putExtra("resortName", adapter.getItem(position));
+                detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId().toString());
+                detail.putExtra("resortName", adapter.getItem(position).getResortName());
+                detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
                 startActivity(detail);
                 adapter.clear();
             }
@@ -66,7 +53,7 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -124,6 +111,7 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(Home.this, SearchActivity.class);
             startActivity(search);
+            adapter.clear();
         } else if (id == R.id.nav_near) {
 
         } else if (id == R.id.nav_messages){
@@ -136,16 +124,12 @@ public class Home extends AppCompatActivity
     private class DownloadSkiResortNameList extends AsyncTask<String, Integer, Long> {
         @Override
         protected Long doInBackground(String... params) {
-                FetchFromDatabase fetchFromDatabase= new FetchFromDatabase();
-                StringRequest stringRequest = fetchFromDatabase.getDataFromDatabase(DatabaseConfig.LOGIN_REQUEST_URL, skiResortNameList, jsonObjectList, true, adapter);
-                RequestQueue requestQueue = Volley.newRequestQueue(Home.this);
-                requestQueue.add(stringRequest);
+                DatabaseOperations.fetchResortInfoFromDatabase(getApplicationContext() ,params[0], adapter);
                 return null;
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
-            Log.d("Database", skiResortNameList.toString());
         }
     }
 }
