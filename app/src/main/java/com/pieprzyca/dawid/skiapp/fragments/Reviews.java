@@ -4,22 +4,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.pieprzyca.dawid.skiapp.R;
 
+import com.pieprzyca.dawid.skiapp.arrayAdapters.ReviewsAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
+import com.pieprzyca.dawid.skiapp.data.ReviewsInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,8 +32,8 @@ import java.util.List;
  */
 public class Reviews extends ListFragment {
     ListView listView;
-    ArrayAdapter<String> adapter;
-    List<String> ratingAndReviewsList = new ArrayList<>();
+    ReviewsAdapter adapter;
+    ArrayList<ReviewsInfo> ratingAndReviewsList = new ArrayList<>();
     public Reviews() {
         // Required empty public constructor
     }
@@ -56,7 +55,7 @@ public class Reviews extends ListFragment {
             e.printStackTrace();
         }
         listView = (ListView)rootView.findViewById(android.R.id.list);
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        adapter = new ReviewsAdapter(getActivity(), android.R.layout.simple_list_item_1, ratingAndReviewsList);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
         new DownloadSkiResortReviewsAndRatings().execute(DatabaseConfig.REVIEW_RATING_REQUEST_URL);
@@ -70,9 +69,8 @@ public class Reviews extends ListFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         adapter.clear();
-        setListAdapter(null);
+        super.onDestroyView();
     }
 
     private class DownloadSkiResortReviewsAndRatings extends AsyncTask<String, Integer, Long> {
@@ -81,16 +79,15 @@ public class Reviews extends ListFragment {
             RequestReviews requestReviews = new RequestReviews(getActivity().getIntent().getStringExtra("skiResortId") , new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    String reviewFromDataBase;
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         JSONArray result = jsonObject.getJSONArray(DatabaseConfig.JSON_ARRAY);
                         for(int arrayElement = 0; arrayElement != result.length(); arrayElement++) {
                             JSONObject element = result.getJSONObject(arrayElement);
-                            reviewFromDataBase = element.getString("review");
-                            ratingAndReviewsList.add(reviewFromDataBase);
+                            ReviewsInfo reviewsInfo = new ReviewsInfo(element.getString("review"), element.getString("date"), element.getString("rating"));
+                            adapter.add(reviewsInfo);
                         }
-                        adapter.addAll(ratingAndReviewsList);
+                        //adapter.addAll(ratingAndReviewsList);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -107,8 +104,6 @@ public class Reviews extends ListFragment {
         }
 
         @Override
-        protected void onPostExecute(Long aLong) {
-            Log.d("Database", ratingAndReviewsList.toString());
-        }
+        protected void onPostExecute(Long aLong) {}
     }
 }

@@ -28,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText etUserName = (EditText) findViewById(R.id.etUserName);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button buttonRegister = (Button) findViewById(R.id.send_register_button);
+        final Button buttonCancel = (Button) findViewById(R.id.cancel_register_button);
 
         /**
          * Request for register informations in userInformation table for database. If it will be fault, we will see alertDialog.
@@ -56,11 +57,18 @@ public class RegisterActivity extends AppCompatActivity {
                 queue.add(requestRegister);
             }
         });
+        buttonCancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void tryRegisterUser(String response) throws JSONException {
         JSONObject jsonObject = new JSONObject(response);
-        Log.d("JSONR", jsonObject.toString());
         boolean success = jsonObject.getBoolean("success");
 
         if(success){

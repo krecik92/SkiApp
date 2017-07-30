@@ -10,13 +10,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.pieprzyca.dawid.skiapp.arrayAdapters.ResortInfoAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
+import com.pieprzyca.dawid.skiapp.data.ResortData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,15 +45,14 @@ public class DatabaseOperations {
     }
 
     private static void AddResortDataObjectToAdapter(String response, ResortInfoAdapter adapter) {
-        ResortData resortData = new ResortData();
         try {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray result = jsonObject.getJSONArray(DatabaseConfig.JSON_ARRAY);
             for (int x = 0; x < result.length(); x++) {
                 JSONObject collegeData = result.getJSONObject(x);
-                resortData.setSkiResortId(collegeData.getInt(DatabaseConfig.SKI_R_ID));
-                resortData.setResortName(collegeData.getString(DatabaseConfig.SKIRESORTS_KEY_NAME));
-                resortData.setResortAddress(collegeData.getString(DatabaseConfig.SKIRESORTS_KEY_ADDRESS));
+                ResortData resortData = new ResortData( collegeData.getInt(DatabaseConfig.SKI_R_ID),
+                    collegeData.getString(DatabaseConfig.SKIRESORTS_KEY_NAME),
+                    collegeData.getString(DatabaseConfig.SKIRESORTS_KEY_ADDRESS));
                 adapter.add(resortData);
             }
         } catch (JSONException e) {

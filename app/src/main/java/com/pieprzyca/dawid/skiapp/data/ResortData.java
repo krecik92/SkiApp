@@ -1,4 +1,4 @@
-package com.pieprzyca.dawid.skiapp;
+package com.pieprzyca.dawid.skiapp.data;
 
 /**
  * Created by Dawid on 16.07.2017.

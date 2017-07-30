@@ -11,24 +11,30 @@
     <string name="weatherTemperature">Temperature</string>
     <string name="weatherLocation">Location</string>
     <string name="action_search">Search</string>
-    <string name="search_label">searchLabel</string>
     <string name="search_hint">Nazwa Ośrodka</string>
-    <string name="title_activity_login">Sign in</string>
     <string name="review">Twoja opinia ...</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_username">User Name</string>
-    <string name="prompt_password">Password </string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="action_register">Register</string>
+    <string name="prompt_name">Imię</string>
+    <string name="prompt_username">Nick</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="button_login">ZALOGUJ</string>
+    <string name="button_register">ZAREJESTRUJ</string>
+    <string name="button_newuser">NOWY UŻYTKOWNIK</string>
+    <string name="button_cancel">ANULUJ</string>
+    <string name="text_newuser">Nazwa użytkownika</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="action_send_register">Send register</string>
+        completions."</string>
     <string name="Wyszukiwanie">Wyszukiwanie</string>
+    <string name="logout">Wyloguj</string>
+    <string name="search_label">search_label</string>
+    <string name="button_send">Wyślij</string>
+    <string name="item_myresorts">Moje ośrodki</string>
+    <string name="item_search">Wyszukaj</string>
+    <string name="item_messanger">Wiadomości</string>
 </resources>

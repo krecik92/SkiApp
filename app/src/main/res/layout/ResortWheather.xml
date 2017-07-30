@@ -11,10 +11,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/weatherTemperature"
         android:id="@+id/temperatureTextView"
-        android:layout_marginTop="35dp"
         android:textStyle="bold"
         android:layout_below="@+id/weatherIconImageView"
-        android:layout_alignStart="@+id/conditionTextView" />
+        android:layout_alignEnd="@+id/weatherIconImageView"
+        android:layout_marginTop="18dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,5 +49,5 @@
         android:id="@+id/weatherIconImageView"
         android:src = "@drawable/na"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/imageView" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

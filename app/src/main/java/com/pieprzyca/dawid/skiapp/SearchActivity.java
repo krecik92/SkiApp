@@ -22,15 +22,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.pieprzyca.dawid.skiapp.arrayAdapters.ResortInfoAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
+import com.pieprzyca.dawid.skiapp.data.ResortData;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ResortInfoAdapter adapter;
+    List<ResortData> resortDataList;
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +57,15 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<ResortData>());
-        adapter.setNotifyOnChange(true);
+        resortDataList = new ArrayList<>();
+        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, resortDataList);
         listView.setAdapter(adapter);
+        adapter.setNotifyOnChange(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detail = new Intent(SearchActivity.this, DetailedActivity.class);
-                detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId());
+                detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId().toString());
                 detail.putExtra("resortName", adapter.getItem(position).getResortName());
                 detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
                 startActivity(detail);
@@ -83,7 +87,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        //adapter.getFilter().filter(query);
+                        adapter.getFilter().filter(query);
                         return false;
                     }
 
@@ -101,28 +105,29 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                Intent intent = new Intent(SearchActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case  R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+    @NotNull
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_skiresort) {
-            Intent home = new Intent(SearchActivity.this, Home.class);
+            Intent home = new Intent(SearchActivity.this, HomeActivity.class);
             startActivity(home);
         } else if (id == R.id.nav_search) {
-
-        } else if (id == R.id.nav_near) {
 
         } else if (id == R.id.nav_messages) {
 
@@ -139,7 +144,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         }
 
         @Override
-        protected void onPostExecute(Long aLong) {
-        }
+        protected void onPostExecute(Long aLong) {}
     }
 }

@@ -1,6 +1,9 @@
 package com.pieprzyca.dawid.skiapp;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,23 +12,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.pieprzyca.dawid.skiapp.arrayAdapters.ResortInfoAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
+import com.pieprzyca.dawid.skiapp.data.ResortData;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Home extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ListView listView;
     ResortInfoAdapter adapter;
+    List<ResortData> resortDataList = new ArrayList<>();
+    SharedPreferences userPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +41,19 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        userPreferences = getSharedPreferences("log-in", Context.MODE_PRIVATE);
+        Log.d("HomeActivity userName:", userPreferences.getString("userName", ""));
+        Log.d("HomeActivity password:", userPreferences.getString("password", ""));
+
         listView = (ListView)findViewById(R.id.listView);
-        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<ResortData>());
+        adapter = new ResortInfoAdapter(this, android.R.layout.simple_list_item_1, resortDataList);
         new DownloadSkiResortNameList().execute(DatabaseConfig.LOGIN_REQUEST_URL);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detail = new Intent(Home.this, DetailedActivity.class);
+                Intent detail = new Intent(HomeActivity.this, DetailedActivity.class);
                 detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId().toString());
                 detail.putExtra("resortName", adapter.getItem(position).getResortName());
                 detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
@@ -66,8 +78,7 @@ public class Home extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
-            Intent intent = new Intent(Home.this, LoginActivity.class);
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
@@ -85,18 +96,22 @@ public class Home extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case  R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+    @NotNull
     /**
      *
      @ parameter item MenuItem
@@ -109,11 +124,9 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_my_skiresort) {
 
         } else if (id == R.id.nav_search) {
-            Intent search = new Intent(Home.this, SearchActivity.class);
+            Intent search = new Intent(HomeActivity.this, SearchActivity.class);
             startActivity(search);
             adapter.clear();
-        } else if (id == R.id.nav_near) {
-
         } else if (id == R.id.nav_messages){
 
         }

@@ -70,8 +70,7 @@ public class ResortWeather extends Fragment implements WheatherServiceCallback {
         wheatherIconImageView.setImageDrawable(wheatherIconDrawable);
         temperatureTextView.setText(item.getCondition().getTemperature()+"\u00B0"+channel.getUnits().getTemperature());
         conditionTextView.setText(item.getCondition().getDescripiton());
-        locationTextView.setText(service.getLocation());
-
+        locationTextView.setText(getActivity().getIntent().getStringExtra("resortName"));
     }
 
     @Override
@@ -83,6 +82,6 @@ public class ResortWeather extends Fragment implements WheatherServiceCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        dialog.hide();
+        dialog.cancel();
     }
 }

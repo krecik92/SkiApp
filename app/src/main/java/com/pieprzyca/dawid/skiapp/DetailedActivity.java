@@ -3,7 +3,6 @@ package com.pieprzyca.dawid.skiapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +19,8 @@ import com.pieprzyca.dawid.skiapp.fragments.ResortLocation;
 import com.pieprzyca.dawid.skiapp.fragments.SkiResortInformation;
 import com.pieprzyca.dawid.skiapp.fragments.Rating;
 import com.pieprzyca.dawid.skiapp.fragments.ResortWeather;
+
+import org.jetbrains.annotations.NotNull;
 
 public class DetailedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,8 +55,7 @@ public class DetailedActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
-            Intent intent = new Intent(DetailedActivity.this, Home.class);
+            Intent intent = new Intent(DetailedActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -73,30 +73,32 @@ public class DetailedActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                Intent intent = new Intent(DetailedActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case  R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+    @NotNull
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_skiresort) {
-            Intent home = new Intent(DetailedActivity.this, Home.class);
+            Intent home = new Intent(DetailedActivity.this, HomeActivity.class);
             startActivity(home);
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(DetailedActivity.this, SearchActivity.class);
             startActivity(search);
-        } else if (id == R.id.nav_near) {
-
         } else if (id == R.id.nav_messages) {
 
         }
