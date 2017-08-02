@@ -130,7 +130,9 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_messages) {
-
+            Intent messanger = new Intent(SearchActivity.this, MessangerActivity.class);
+            startActivity(messanger);
+            adapter.clear();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

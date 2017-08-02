@@ -4,6 +4,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,9 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pieprzyca.dawid.skiapp.R;
@@ -23,8 +25,8 @@ import java.util.List;
 /**
  * Created by Dawid on 29.05.2016.
  */
-public class ResortLocation extends Fragment {
-    private MapView mapView;
+public class ResortLocation extends Fragment implements OnMapReadyCallback {
+    private SupportMapFragment supportMapFragment;
     private GoogleMap map;
 
     public ResortLocation() {
@@ -41,23 +43,9 @@ public class ResortLocation extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.resortlocation, container, false);
-        mapView = (MapView) view.findViewById(R.id.mapview);
-        mapView.onCreate(savedInstanceState);
-
-        map = mapView.getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        //map.setMyLocationEnabled(true);
-
-        MapsInitializer.initialize(this.getActivity());
-        LatLng localization = getLocationFromAddress();
-        if (localization == null) return null;
-
-        // Updates the location and zoom of the MapView
-        //LatLng localization = new LatLng(49.420770, 20.925286);
-        map.addMarker(new MarkerOptions().position(localization).title(getActivity().getIntent().getStringExtra("resortName")));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(localization, 11);
-        map.animateCamera(cameraUpdate);
-
+        //supportMapFragment = (MapView) view.findViewById(R.id.mapview);
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this);
         return view;
     }
     /**
@@ -68,9 +56,10 @@ public class ResortLocation extends Fragment {
         Geocoder coder = new Geocoder(getContext());
         LatLng localization = new LatLng(0.0, 0.0);
         try {
-            List<Address> addressList = coder.getFromLocationName(getActivity().getIntent().getStringExtra("resortName"), 3);
+            List<Address> addressList = coder.getFromLocationName(getActivity().getIntent().getStringExtra("resortAddress"), 3);
             if(addressList == null)
                 return null;
+            Log.d("ADDRESS LIST: ", addressList.toString());
             Address location = addressList.get(0);
             localization = new LatLng(location.getLatitude(), location.getLongitude());
         } catch (IOException e) {
@@ -81,19 +70,34 @@ public class ResortLocation extends Fragment {
 
     @Override
     public void onResume() {
-        mapView.onResume();
+        supportMapFragment.onResume();
         super.onResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        supportMapFragment.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        supportMapFragment.onLowMemory();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        //map.setMyLocationEnabled(true);
+        MapsInitializer.initialize(this.getActivity());
+        LatLng localization = getLocationFromAddress();
+
+        // Updates the location and zoom of the MapView
+        map.addMarker(new MarkerOptions().position(localization).title(getActivity().getIntent().getStringExtra("resortName")));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(localization, 11);
+        map.animateCamera(cameraUpdate);
     }
 }

@@ -1,11 +1,11 @@
 <?php
     $con = mysqli_connect("localhost", "id1391953_dawid_pieprzyca", "nadal21", "id1391953_skiappdatabase");
 
-    $userName= isset($_POST['userName']) ? $_POST['userName'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    $statement = mysqli_prepare($con, "SELECT * FROM userInformation WHERE userName = ? AND password = ?");
-    mysqli_stmt_bind_param($statement, "ss", $userName, $password);
+    $statement = mysqli_prepare($con, "SELECT * FROM userInformation WHERE email = ? AND password = ?");
+    mysqli_stmt_bind_param($statement, "ss", $email, $password);
     mysqli_stmt_execute($statement);
 
     mysqli_stmt_store_result($statement);

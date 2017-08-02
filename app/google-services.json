@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "478036934419",
+    "firebase_url": "https://skiapp-f9a33.firebaseio.com",
+    "project_id": "skiapp-f9a33",
+    "storage_bucket": "skiapp-f9a33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478036934419:android:16653e644ef9b54a",
+        "android_client_info": {
+          "package_name": "com.pieprzyca.dawid.skiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478036934419-7af5mh564aa6i0mtlaiia0fite2tr9c8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pieprzyca.dawid.skiapp",
+            "certificate_hash": "ebc8652cedcd8f06957b04058d53a36731b42986"
+          }
+        },
+        {
+          "client_id": "478036934419-2joisuscuee4usclouqi42bm0jugnrg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCen7MeyrEs-njZMawKmpyPpXqeagmneGo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478036934419-2joisuscuee4usclouqi42bm0jugnrg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,10 +13,10 @@ public class RequestLogin extends StringRequest{
     private static final String LOGIN_REQUEST_URL = "http://dawidpieprzyca.hostei.com/Login.php";
     private Map<String,String> params;
 
-    public RequestLogin(String userName, String password, Response.Listener<String> listener) {
+    public RequestLogin(String email, String password, Response.Listener<String> listener) {
         super(Method.POST, LOGIN_REQUEST_URL, listener, null);
         params = new HashMap<>();
-        params.put("userName", userName);
+        params.put("email", email);
         params.put("password", password);
     }
 

@@ -1,6 +1,5 @@
 package com.pieprzyca.dawid.skiapp;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -128,7 +127,9 @@ public class HomeActivity extends AppCompatActivity
             startActivity(search);
             adapter.clear();
         } else if (id == R.id.nav_messages){
-
+            Intent messangerIntent = new Intent(HomeActivity.this, MessangerActivity.class);
+            startActivity(messangerIntent);
+            adapter.clear();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

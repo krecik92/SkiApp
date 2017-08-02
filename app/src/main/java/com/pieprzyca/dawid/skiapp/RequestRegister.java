@@ -14,11 +14,11 @@ public class RequestRegister extends StringRequest{
     private static final String REGISTER_REQUEST_URL = "http://dawidpieprzyca.hostei.com/Register.php";
     private Map<String,String> params;
 
-    public RequestRegister(String name, String userName, String email, String password, Response.Listener<String> listener) {
+    public RequestRegister(String name, String surname, String email, String password, Response.Listener<String> listener) {
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("name", name);
-        params.put("userName", userName);
+        params.put("surname", surname);
         params.put("email", email);
         params.put("password", password);
     }

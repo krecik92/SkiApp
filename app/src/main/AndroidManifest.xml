@@ -55,6 +55,9 @@
             android:name=".RegisterActivity"
             android:label="Register">
         </activity>
+        <activity
+            android:name=".MessangerActivity"
+            android:label="Messanger"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
-
 </manifest>
