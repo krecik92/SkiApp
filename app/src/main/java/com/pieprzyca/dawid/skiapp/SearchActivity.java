@@ -4,14 +4,15 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,11 +23,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.pieprzyca.dawid.skiapp.arrayAdapters.ResortInfoAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
 import com.pieprzyca.dawid.skiapp.data.ResortData;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,8 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     ResortInfoAdapter adapter;
     List<ResortData> resortDataList;
     ListView listView;
+    private SharedPreferences userPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        assert drawer != null;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -54,6 +57,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             Toast.makeText(SearchActivity.this, query, Toast.LENGTH_SHORT).show();
         }
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
@@ -65,14 +69,20 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detail = new Intent(SearchActivity.this, DetailedActivity.class);
-                detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId().toString());
-                detail.putExtra("resortName", adapter.getItem(position).getResortName());
-                detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
+                putInfoToNextIntent(position, detail);
                 startActivity(detail);
                 adapter.clear();
             }
         });
+        userPreferences = getSharedPreferences("log-in", Context.MODE_PRIVATE);
     }
+
+    private void putInfoToNextIntent(int position, Intent detail) {
+        detail.putExtra("skiResortId", adapter.getItem(position).getSkiResortId().toString());
+        detail.putExtra("resortName", adapter.getItem(position).getResortName());
+        detail.putExtra("resortAddress", adapter.getItem(position).getResortAddress());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.search, menu);
@@ -80,7 +90,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         SearchView searchView = (SearchView) MenuItemCompat.getActionView((searchItem));
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getBaseContext(), SearchActivity.class);
-        new DownloadSkiResortNameList().execute(DatabaseConfig.LOGIN_REQUEST_URL);
+        new DownloadSkiResortNameList().execute(DatabaseConfig.ALL_SKIRESORTS_REQUEST_URL);
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(componentName));
         searchView.setOnQueryTextListener(
@@ -107,6 +117,9 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_logout:
+                Log.d("FIREBASE : ", "Try signout");
+                FirebaseAuth.getInstance().signOut();
+                Log.d("FIREBASE : ", "After signout");
                 Intent intent = new Intent(SearchActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -119,7 +132,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    @NotNull
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -135,13 +147,21 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             adapter.clear();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseAuth.getInstance().signOut();
+    }
+
     private class DownloadSkiResortNameList extends AsyncTask<String, Integer, Long> {
         @Override
         protected Long doInBackground(String... params) {
-                DatabaseOperations.fetchResortInfoFromDatabase(getApplicationContext(), params[0], adapter);
+            DatabaseOperations.fetchResortsFromDatabase(getApplicationContext(), params[0], userPreferences.getString("user_id", "0"), adapter);
                 return null;
         }
 

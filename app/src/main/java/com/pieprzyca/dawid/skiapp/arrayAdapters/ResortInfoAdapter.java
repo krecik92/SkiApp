@@ -1,9 +1,9 @@
 package com.pieprzyca.dawid.skiapp.arrayAdapters;
 
+import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +17,11 @@ import com.pieprzyca.dawid.skiapp.R;
 import com.pieprzyca.dawid.skiapp.data.ResortData;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Dawid on 16.07.2017.
+ * Klasa definjująca Adapter dla listy z informacjami o ośrodkach narciarskich.
  */
 
 public class ResortInfoAdapter extends  ArrayAdapter<ResortData> implements Filterable {
@@ -85,8 +85,8 @@ public class ResortInfoAdapter extends  ArrayAdapter<ResortData> implements Filt
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-                resortDataList = (List<ResortData>) results.values;
-                notifyDataSetChanged();
+            resortDataList = (ArrayList<ResortData>) results.values;
+            notifyDataSetChanged();
         }
     }
 }

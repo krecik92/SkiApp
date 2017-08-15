@@ -7,7 +7,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
@@ -15,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.pieprzyca.dawid.skiapp.R;
-
 import com.pieprzyca.dawid.skiapp.arrayAdapters.ReviewsAdapter;
 import com.pieprzyca.dawid.skiapp.data.DatabaseConfig;
 import com.pieprzyca.dawid.skiapp.data.ReviewsInfo;
@@ -25,10 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Dawid on 29.05.2016.
+ * Klasa odpowiedzialna za wyświetlanie opinie w fragmencie za to odpowiedzialnym.
  */
 public class Reviews extends ListFragment {
     ListView listView;
@@ -54,7 +52,10 @@ public class Reviews extends ListFragment {
         catch (Exception e){
             e.printStackTrace();
         }
-        listView = (ListView)rootView.findViewById(android.R.id.list);
+
+        if (rootView != null) {
+            listView = (ListView) rootView.findViewById(android.R.id.list);
+        }
         adapter = new ReviewsAdapter(getActivity(), android.R.layout.simple_list_item_1, ratingAndReviewsList);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
@@ -87,7 +88,6 @@ public class Reviews extends ListFragment {
                             ReviewsInfo reviewsInfo = new ReviewsInfo(element.getString("review"), element.getString("date"), element.getString("rating"));
                             adapter.add(reviewsInfo);
                         }
-                        //adapter.addAll(ratingAndReviewsList);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

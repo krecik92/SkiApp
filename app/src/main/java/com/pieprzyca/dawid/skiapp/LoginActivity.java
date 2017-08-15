@@ -6,20 +6,17 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -36,41 +33,42 @@ import org.json.JSONObject;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     // UI references.
-    private EditText mUserNameView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
     private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mUserNameView = (EditText) findViewById(R.id.username);
+        mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
-        final TextView registerNewUserLink = (TextView) findViewById(R.id.register_button);
-        firebaseAuth = FirebaseAuth.getInstance();
+        final TextView registerNewUserButton = (TextView) findViewById(R.id.register_button);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null)
+            Log.d("FIREBASE", firebaseAuth.getCurrentUser().getEmail());
         pref = getSharedPreferences("log-in", Context.MODE_PRIVATE);
         editor = pref.edit();
 
+        assert mEmailSignInButton != null;
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                editor.putString("userName", mUserNameView.getText().toString());
-                editor.putString("password", mUserNameView.getText().toString());
-                editor.apply();
             }
         });
 
-        registerNewUserLink.setOnClickListener(new View.OnClickListener() {
+        assert registerNewUserButton != null;
+        registerNewUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -85,12 +83,14 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptLogin() {
 
         // Reset errors.
-        mUserNameView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUserNameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        if (validateFields(email, password)) return;
+        signIn(email, password);
         showProgress(true);
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -99,28 +99,36 @@ public class LoginActivity extends AppCompatActivity {
                     checkUserNameAndPassword(response);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Database connection error!", Toast.LENGTH_LONG).show();
                 }
             }
         };
         RequestLogin requestLogin = new com.pieprzyca.dawid.skiapp.RequestLogin(email, password, responseListener);
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         queue.add(requestLogin);
-        signIn(email, password);
+    }
+
+    private boolean validateFields(String email, String password) {
+        if (email.equals("") || password.equals("")) {
+            Toast.makeText(getApplicationContext(), "Email or Password is empty!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
     private void checkUserNameAndPassword(String response) throws JSONException {
         JSONObject jsonResponse = new JSONObject(response);
-        boolean success = jsonResponse.getBoolean("success");
-        if(success){
+        boolean isCorrect = jsonResponse.getBoolean("success");
+        Log.d("VERIFY: ", String.valueOf(isCorrect));
+        if (isCorrect) {
             Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
-            LoginActivity.this.startActivity(homeIntent);
+            int user_id = jsonResponse.getInt("user_id");
+            editor.putString("user_id", String.valueOf(user_id));
+            editor.apply();
+            startActivity(homeIntent);
             showProgress(false);
         }else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-            builder.setMessage("Login failed")
-                    .setNegativeButton("Retry", null)
-                    .create()
-                    .show();
+            Toast.makeText(getApplicationContext(), "Login Failed!", Toast.LENGTH_SHORT).show();
             showProgress(false);
         }
     }
@@ -133,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_mediumAnimTime);
 
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         mLoginFormView.animate().setDuration(shortAnimTime).alpha(
@@ -155,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void signIn(String email, String password){
         Log.d("FIREBASE: ", "signIn: " + email);
-
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

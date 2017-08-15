@@ -14,80 +14,76 @@
 
         <EditText
             android:id="@+id/etName"
-            android:drawableStart="@drawable/ic_person_black_24dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
-            android:textColor="#000"
-            android:textColorHint="#000"
-            android:background="#fff"
-            android:hint="@string/prompt_name"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="100dp"
+            android:background="#fff"
+            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:hint="@string/prompt_name"
             android:padding="10dp"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"/>
+            android:textColor="#000"
+            android:textColorHint="#000" />
 
         <EditText
-            android:id="@+id/etUserName"
-            android:drawableStart="@drawable/ic_person_black_24dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
-            android:textColor="#000"
-            android:textColorHint="#000"
-            android:background="#fff"
-            android:hint="@string/prompt_username"
+            android:id="@+id/etSurName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:hint="@string/prompt_surname"
             android:padding="10dp"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:textColor="#000"
+            android:textColorHint="#000" />
 
         <EditText
             android:id="@+id/etEmail"
-            android:drawableStart="@drawable/ic_email_black_24dp"
-            android:drawableLeft="@drawable/ic_email_black_24dp"
-            android:textColor="#000"
-            android:textColorHint="#000"
-            android:background="#fff"
-            android:hint="@string/prompt_email"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textColorHint="#000" />
 
         <EditText
             android:id="@+id/etPassword"
-            android:drawableStart="@drawable/ic_enhanced_encryption_black_24dp"
-            android:drawableLeft="@drawable/ic_enhanced_encryption_black_24dp"
-            android:textColor="#000"
-            android:textColorHint="#000"
-            android:background="#fff"
-            android:hint="@string/prompt_password"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:drawableStart="@drawable/ic_enhanced_encryption_black_24dp"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textColorHint="#000" />
 
         <Button
             android:id="@+id/send_register_button"
-            android:textColor="#fff"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:background="@drawable/mybutton"
             android:text="@string/button_register"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:textColor="#fff" />
         <Button
             android:id="@+id/cancel_register_button"
-            android:textColor="#fff"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:background="@drawable/mybutton"
             android:text="@string/button_cancel"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:textColor="#fff" />
     </LinearLayout>
 
 </RelativeLayout>

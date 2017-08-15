@@ -9,24 +9,24 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00CCCC"
-        android:orientation="vertical"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:background="#00CCCC"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="155dp"
-            android:orientation="vertical"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/iconView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_launcherski"
                 android:layout_gravity="center"
-                android:contentDescription="skiapp_logo"/>
+                android:contentDescription="skiapp_logo"
+                android:src="@drawable/ic_launcherski" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -37,21 +37,21 @@
                 android:text="Witaj w SkiApplication!"
                 android:textAlignment="center"
                 android:textColor="#fff"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:visibility="visible" />
         </LinearLayout>
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/email"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:background="#fff"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
             android:drawableStart="@drawable/ic_person_black_24dp"
-            android:hint="Nazwa użytkownika"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColor="#000"
             android:textColorHint="#000" />
@@ -63,7 +63,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="#fff"
-            android:drawableLeft="@drawable/ic_enhanced_encryption_black_24dp"
             android:drawableStart="@drawable/ic_enhanced_encryption_black_24dp"
             android:hint="Hasło"
             android:inputType="textPassword"

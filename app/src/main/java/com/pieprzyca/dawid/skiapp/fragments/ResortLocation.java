@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pieprzyca.dawid.skiapp.R;
@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * Created by Dawid on 29.05.2016.
+ *
+ * Framgent odpowiadający za wyświetlania mapy z znacznikiem lokalizacji.
  */
 public class ResortLocation extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment supportMapFragment;
@@ -43,7 +45,6 @@ public class ResortLocation extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.resortlocation, container, false);
-        //supportMapFragment = (MapView) view.findViewById(R.id.mapview);
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
         return view;
@@ -96,6 +97,7 @@ public class ResortLocation extends Fragment implements OnMapReadyCallback {
         LatLng localization = getLocationFromAddress();
 
         // Updates the location and zoom of the MapView
+        assert localization != null;
         map.addMarker(new MarkerOptions().position(localization).title(getActivity().getIntent().getStringExtra("resortName")));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(localization, 11);
         map.animateCamera(cameraUpdate);
