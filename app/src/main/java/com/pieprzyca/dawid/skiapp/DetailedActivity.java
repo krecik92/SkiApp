@@ -129,7 +129,8 @@ public class DetailedActivity extends AppCompatActivity
             Intent search = new Intent(DetailedActivity.this, SearchActivity.class);
             startActivity(search);
         } else if (id == R.id.nav_messages) {
-
+            Intent messanger = new Intent(DetailedActivity.this, MessangerActivity.class);
+            startActivity(messanger);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;

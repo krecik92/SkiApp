@@ -3,7 +3,10 @@ package com.pieprzyca.dawid.skiapp.fragments;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,10 +48,24 @@ public class ResortLocation extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.resortlocation, container, false);
-        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        supportMapFragment.getMapAsync(this);
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        supportMapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map);
+        if (supportMapFragment == null) {
+            supportMapFragment = new SupportMapFragment();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.map, supportMapFragment);
+            fragmentTransaction.commit();
+            fragmentManager.executePendingTransactions();
+        }
+        supportMapFragment.getMapAsync(this);
+    }
+
     /**
      *  getLocationFromAddress()
      *  This method get resort name from database and return LatLng object for it.
@@ -56,8 +73,14 @@ public class ResortLocation extends Fragment implements OnMapReadyCallback {
     private LatLng getLocationFromAddress() {
         Geocoder coder = new Geocoder(getContext());
         LatLng localization = new LatLng(0.0, 0.0);
+        List<Address> addressList;
         try {
-            List<Address> addressList = coder.getFromLocationName(getActivity().getIntent().getStringExtra("resortAddress"), 3);
+            if (getActivity().getIntent().getStringExtra("resortAddress") == null) {
+                addressList = null;
+            } else {
+                addressList = coder.getFromLocationName(getActivity().getIntent().getStringExtra("resortAddress"), 3);
+            }
+
             if(addressList == null)
                 return null;
             Log.d("ADDRESS LIST: ", addressList.toString());
@@ -78,7 +101,15 @@ public class ResortLocation extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        supportMapFragment.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (supportMapFragment != null) {
+            getChildFragmentManager().beginTransaction().remove(supportMapFragment).commitAllowingStateLoss();
+        }
+        supportMapFragment = null;
     }
 
     @Override

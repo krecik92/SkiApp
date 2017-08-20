@@ -29,7 +29,7 @@ import java.util.Map;
 public class DatabaseOperations {
     public static void fetchResortsFromDatabase(Context context, String url, final String userId, final ResortInfoAdapter adapter) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 AddResortDataObjectToAdapter(response, adapter);

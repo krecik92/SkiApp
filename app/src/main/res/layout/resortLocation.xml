@@ -5,13 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ResortLocation">
 
-    <!--<com.google.android.gms.maps.MapView
-        android:id="@+id/mapview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
     <fragment
         android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:layout_height="match_parent" />
 </RelativeLayout>

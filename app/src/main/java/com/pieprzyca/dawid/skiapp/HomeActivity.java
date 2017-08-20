@@ -147,6 +147,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        adapter.clear();
+        Log.d("HomeActivity", "SignOut");
         FirebaseAuth.getInstance().signOut();
     }
 

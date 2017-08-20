@@ -86,6 +86,7 @@ public class ResortInfoAdapter extends  ArrayAdapter<ResortData> implements Filt
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             resortDataList = (ArrayList<ResortData>) results.values;
+            addAll(resortDataList);
             notifyDataSetChanged();
         }
     }

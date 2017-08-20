@@ -16,6 +16,9 @@ import com.pieprzyca.dawid.skiapp.R;
 public class SkiResortInformation extends Fragment {
     String[] openAndClose = {"otwarty", "zamknięty"};
     private TextView statusText;
+    private TextView numberOfRoutes;
+    private TextView numberOfLifts;
+    private TextView snow;
     public SkiResortInformation() {
         // Required empty public constructor
     }
@@ -32,12 +35,20 @@ public class SkiResortInformation extends Fragment {
 
         View view =  inflater.inflate(R.layout.skiresortinformation, container, false);
         statusText = (TextView)view.findViewById(R.id.changesStatus);
-        statusText.setText(openAndClose[0]);
+        statusText.setText(openAndClose[1]);
+
         if(statusText.getText() == "otwarty")
             statusText.setTextColor(Color.GREEN);
         else{
             statusText.setTextColor(Color.RED);
         }
+
+        numberOfRoutes = (TextView) view.findViewById(R.id.numberOfRoutes);
+        numberOfRoutes.setText("9");
+        numberOfLifts = (TextView) view.findViewById(R.id.numberOfLifts);
+        numberOfLifts.setText("8");
+        snow = (TextView) view.findViewById(R.id.snow);
+        snow.setText("0 cm");
         return view;
     }
 }

@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
+        Button mSignInButton = (Button) findViewById(R.id.login_button);
         final TextView registerNewUserButton = (TextView) findViewById(R.id.register_button);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         pref = getSharedPreferences("log-in", Context.MODE_PRIVATE);
         editor = pref.edit();
 
-        assert mEmailSignInButton != null;
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        assert mSignInButton != null;
+        mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
